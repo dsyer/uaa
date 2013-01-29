@@ -183,12 +183,18 @@
 		<constructor-arg ref="jdbcClientDetailsService" />
 		<property name="defaultScopes" ref="defaultUserAuthorities" />
 	</bean>
+	
+    <bean id="signerProvider" class="org.cloudfoundry.identity.uaa.oauth.token.SignerProvider">
+        <property name="signingKey" value="${jwt.token.signing-key:tokenkey}" />
+        <property name="verifierKey" value="${jwt.token.verification-key:tokenkey}" />
+    </bean>
 
-	<bean id="tokenServices" class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
-		<property name="supportRefreshToken" value="true" />
-		<property name="tokenStore" ref="tokenStore" />
-		<property name="tokenEnhancer" ref="jwtTokenEnhancer" />
+	<bean id="tokenServices" class="org.cloudfoundry.identity.uaa.oauth.token.UaaTokenServices">
 		<property name="clientDetailsService" ref="jdbcClientDetailsService" />
+		<property name="userDatabase" ref="userDatabase" />
+		<property name="signerProvider" ref="signerProvider" />
+		<property name="defaultUserAuthorities" ref="defaultUserAuthorities" />
+		<property name="issuer" value="${issuer.uri}" />
 	</bean>
 
 	<context:mbean-server id="mbeanServer" />
@@ -214,7 +220,7 @@
 		<property name="registrationBehaviorName" value="REGISTRATION_REPLACE_EXISTING" />
 	</bean>
 
-	<bean id="jwtTokenEnhancer" class="org.cloudfoundry.identity.uaa.oauth.JwtTokenEnhancer">
+	<bean id="tokenKeyEndpoint" class="org.cloudfoundry.identity.uaa.oauth.token.TokenKeyEndpoint">
 		<property name="signingKey" value="${jwt.token.signing-key:tokenkey}" />
 		<property name="verifierKey" value="${jwt.token.verification-key:tokenkey}" />
 	</bean>
@@ -233,8 +239,6 @@
 		<value>cloud_controller.read</value>
 		<value>cloud_controller.write</value>
 		<value>password.write</value>
-		<value>tokens.write</value>
-		<value>tokens.read</value>
 		<value>scim.userids</value>
 		<value>uaa.user</value>
 		<value>approvals.me</value>
