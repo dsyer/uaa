@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.cloudfoundry.identity.uaa.integration;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -21,9 +20,11 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.params.ClientPNames;
-import org.apache.http.client.params.CookiePolicy;
+import org.apache.http.client.config.CookieSpecs;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.config.RequestConfig.Builder;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.protocol.HttpContext;
 import org.cloudfoundry.identity.uaa.test.TestProfileEnvironment;
 import org.cloudfoundry.identity.uaa.test.UrlHelper;
 import org.junit.Assume;
@@ -31,6 +32,7 @@ import org.junit.internal.AssumptionViolatedException;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
+import org.springframework.boot.test.RestTemplates;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -38,13 +40,11 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.client.support.HttpAccessor;
 import org.springframework.security.oauth2.client.test.RestTemplateHolder;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
@@ -323,19 +323,7 @@ public class ServerRunning implements MethodRule, RestTemplateHolder, UrlHelper 
     }
 
     public RestTemplate createRestTemplate() {
-        RestTemplate client = new RestTemplate();
-        client.setRequestFactory(new StatelessRequestFactory());
-        client.setErrorHandler(new ResponseErrorHandler() {
-            // Pass errors through in response entity for status code analysis
-            @Override
-            public boolean hasError(ClientHttpResponse response) throws IOException {
-                return false;
-            }
-
-            @Override
-            public void handleError(ClientHttpResponse response) throws IOException {
-            }
-        });
+        RestTemplate client = RestTemplates.get();
         return client;
     }
 
@@ -344,13 +332,15 @@ public class ServerRunning implements MethodRule, RestTemplateHolder, UrlHelper 
     }
 
     private static class StatelessRequestFactory extends HttpComponentsClientHttpRequestFactory {
-        @Override
-        public HttpClient getHttpClient() {
-            HttpClient client = super.getHttpClient();
-            client.getParams().setBooleanParameter(ClientPNames.HANDLE_REDIRECTS, false);
-            client.getParams().setParameter(ClientPNames.COOKIE_POLICY, CookiePolicy.IGNORE_COOKIES);
-            return client;
-        }
+		@Override
+		protected HttpContext createHttpContext(HttpMethod httpMethod, URI uri) {
+			HttpClientContext context = HttpClientContext.create();
+			Builder builder = RequestConfig.custom()
+					.setCookieSpec(CookieSpecs.IGNORE_COOKIES)
+					.setAuthenticationEnabled(false).setRedirectsEnabled(false);
+			context.setRequestConfig(builder.build());
+			return context;
+		}
     }
 
     public static class UriBuilder {
