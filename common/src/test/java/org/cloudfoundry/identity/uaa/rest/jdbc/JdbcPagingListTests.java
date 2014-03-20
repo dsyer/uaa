@@ -23,6 +23,7 @@ import java.util.Set;
 
 import javax.sql.DataSource;
 
+import org.cloudfoundry.identity.uaa.config.DataSourceConfiguration;
 import org.cloudfoundry.identity.uaa.test.NullSafeSystemProfileValueSource;
 import org.junit.After;
 import org.junit.Before;
@@ -40,7 +41,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author Luke Taylor
  * @author Dave Syer
  */
-@ContextConfiguration(locations = { "classpath:spring/env.xml", "classpath:spring/data-source.xml" })
+@ContextConfiguration(classes = DataSourceConfiguration.class)
 @RunWith(SpringJUnit4ClassRunner.class)
 @IfProfileValue(name = "spring.profiles.active", values = { "", "test,postgresql", "hsqldb", "test,mysql",
                 "test,oracle" })

@@ -28,6 +28,7 @@ import java.util.Collection;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.cloudfoundry.identity.uaa.config.DataSourceConfiguration;
 import org.cloudfoundry.identity.uaa.test.NullSafeSystemProfileValueSource;
 import org.cloudfoundry.identity.uaa.test.TestUtils;
 import org.junit.After;
@@ -48,7 +49,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestContextManager;
 import org.springframework.util.ReflectionUtils;
 
-@ContextConfiguration(locations = { "classpath:spring/env.xml", "classpath:spring/data-source.xml" })
+@ContextConfiguration(classes = DataSourceConfiguration.class)
 @RunWith(Parameterized.class)
 @IfProfileValue(name = "spring.profiles.active", values = { "", "test,postgresql", "hsqldb", "test,mysql",
                 "test,oracle" })

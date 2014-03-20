@@ -25,7 +25,7 @@ import org.cloudfoundry.identity.uaa.config.YamlServletProfileInitializer;
 import org.cloudfoundry.identity.uaa.oauth.ClientAdminBootstrap;
 import org.cloudfoundry.identity.uaa.scim.ScimUserProvisioning;
 import org.cloudfoundry.identity.uaa.server.GenericNonEmbeddedWebApplicationContext;
-import org.cloudfoundry.identity.uaa.server.UaaApplication;
+import org.cloudfoundry.identity.uaa.server.UaaApplicationConfiguration;
 import org.cloudfoundry.identity.uaa.test.TestUtils;
 import org.cloudfoundry.identity.uaa.user.JdbcUaaUserDatabase;
 import org.junit.After;
@@ -76,7 +76,7 @@ public class BootstrapTests {
 
 	@Test
 	public void testRootContextDefaults() throws Exception {
-		context = getServletContext("hsqldb", UaaApplication.class);
+		context = getServletContext("hsqldb", UaaApplicationConfiguration.class);
 		assertNotNull(context.getBean("userDatabase", JdbcUaaUserDatabase.class));
 		FilterChainProxy filterChain = context.getBean(FilterChainProxy.class);
 		MockHttpServletResponse response = new MockHttpServletResponse();
@@ -90,7 +90,7 @@ public class BootstrapTests {
 	@Test
 	public void testOverrideYmlConfigPath() throws Exception {
 		System.setProperty("UAA_CONFIG_PATH", "./src/test/resources/test/config");
-		context = getServletContext(UaaApplication.class, TestOverrideConfiguration.class);
+		context = getServletContext(UaaApplicationConfiguration.class, TestOverrideConfiguration.class);
 		assertEquals("/tmp/uaa/logs", context.getBean("foo", String.class));
 		assertEquals(
 				"[vmc, my, support]",

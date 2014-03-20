@@ -22,6 +22,7 @@ import static org.mockito.Mockito.when;
 import java.sql.Timestamp;
 import java.util.Arrays;
 
+import org.cloudfoundry.identity.uaa.config.DataSourceConfiguration;
 import org.cloudfoundry.identity.uaa.test.NullSafeSystemProfileValueSource;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +36,7 @@ import org.springframework.test.annotation.ProfileValueSourceConfiguration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@ContextConfiguration(locations = { "classpath:spring/env.xml", "classpath:spring/data-source.xml" })
+@ContextConfiguration(classes = DataSourceConfiguration.class)
 @RunWith(SpringJUnit4ClassRunner.class)
 @IfProfileValue(name = "spring.profiles.active", values = { "", "test,postgresql", "hsqldb", "test,mysql",
                 "test,oracle" })

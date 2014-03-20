@@ -30,6 +30,7 @@ import java.util.UUID;
 
 import javax.sql.DataSource;
 
+import org.cloudfoundry.identity.uaa.config.DataSourceConfiguration;
 import org.cloudfoundry.identity.uaa.rest.SimpleAttributeNameMapper;
 import org.cloudfoundry.identity.uaa.rest.jdbc.JdbcPagingListFactory;
 import org.cloudfoundry.identity.uaa.rest.jdbc.LimitSqlAdapter;
@@ -62,7 +63,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author Luke Taylor
  * @author Dave Syer
  */
-@ContextConfiguration(locations = { "classpath:spring/env.xml", "classpath:spring/data-source.xml" })
+@ContextConfiguration(classes = DataSourceConfiguration.class)
 @RunWith(SpringJUnit4ClassRunner.class)
 @IfProfileValue(name = "spring.profiles.active", values = { "", "test,postgresql", "hsqldb", "test,mysql",
                 "test,oracle" })

@@ -16,6 +16,7 @@ import static org.junit.Assert.assertEquals;
 
 import javax.sql.DataSource;
 
+import org.cloudfoundry.identity.uaa.config.DataSourceConfiguration;
 import org.cloudfoundry.identity.uaa.rest.jdbc.JdbcPagingListFactory;
 import org.cloudfoundry.identity.uaa.rest.jdbc.LimitSqlAdapter;
 import org.cloudfoundry.identity.uaa.test.NullSafeSystemProfileValueSource;
@@ -32,7 +33,7 @@ import org.springframework.test.annotation.ProfileValueSourceConfiguration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@ContextConfiguration(locations = { "classpath:spring/env.xml", "classpath:spring/data-source.xml" })
+@ContextConfiguration(classes = DataSourceConfiguration.class)
 @RunWith(SpringJUnit4ClassRunner.class)
 @IfProfileValue(name = "spring.profiles.active", values = { "", "test,postgresql", "hsqldb", "test,mysql",
                 "test,oracle" })

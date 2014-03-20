@@ -26,6 +26,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.cloudfoundry.identity.uaa.authorization.ExternalGroupMappingAuthorizationManager;
+import org.cloudfoundry.identity.uaa.config.DataSourceConfiguration;
 import org.cloudfoundry.identity.uaa.security.SecurityContextAccessor;
 import org.cloudfoundry.identity.uaa.security.StubSecurityContextAccessor;
 import org.cloudfoundry.identity.uaa.test.NullSafeSystemProfileValueSource;
@@ -51,7 +52,7 @@ import org.springframework.util.StringUtils;
  * 
  */
 
-@ContextConfiguration(locations = { "classpath:spring/env.xml", "classpath:spring/data-source.xml" })
+@ContextConfiguration(classes = DataSourceConfiguration.class)
 @RunWith(SpringJUnit4ClassRunner.class)
 @IfProfileValue(name = "spring.profiles.active", values = { "", "test,postgresql", "hsqldb", "test,mysql",
                 "test,oracle" })
