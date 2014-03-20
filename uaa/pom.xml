@@ -16,16 +16,17 @@
 	<description>User Account and Authentication Service</description>
 
 	<properties>
-        <m2eclipse.wtp.contextRoot>/uaa</m2eclipse.wtp.contextRoot>
+		<m2eclipse.wtp.contextRoot>/uaa</m2eclipse.wtp.contextRoot>
 		<uaa.path>/uaa</uaa.path>
-		<!-- Brain dead install plugin (Maven 3) cannot extract this stuff from its own configuration -->
+		<!-- Brain dead install plugin (Maven 3) cannot extract this stuff from 
+			its own configuration -->
 		<file>target/${project.artifactId}-${project.version}.war</file>
 		<groupId>${project.groupId}</groupId>
 		<artifactId>uaa</artifactId>
 		<version>${project.version}</version>
 		<packaging>war</packaging>
 		<generatePom>true</generatePom>
-        <dot.git.directory>../.git</dot.git.directory>
+		<dot.git.directory>../.git</dot.git.directory>
 	</properties>
 
 	<profiles>
@@ -53,31 +54,31 @@
 			<id>integration</id>
 			<build>
 				<plugins>
-                    <plugin>
-                        <groupId>org.apache.tomcat.maven</groupId>
-                        <artifactId>tomcat7-maven-plugin</artifactId>
-                        <configuration>
-                            <webapps>
-                                <webapp>
-                                    <groupId>org.cloudfoundry.identity</groupId>
-                                    <artifactId>cloudfoundry-identity-api</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>war</type>
-                                    <contextPath>api</contextPath>
-                                    <asWebapp>true</asWebapp>
-                                </webapp>
-                                <webapp>
-                                    <groupId>org.cloudfoundry.identity</groupId>
-                                    <artifactId>cloudfoundry-identity-app</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>war</type>
-                                    <contextPath>app</contextPath>
-                                    <asWebapp>true</asWebapp>
-                                </webapp>
-                            </webapps>
-                        </configuration>
-                    </plugin>
-                </plugins>
+					<plugin>
+						<groupId>org.apache.tomcat.maven</groupId>
+						<artifactId>tomcat7-maven-plugin</artifactId>
+						<configuration>
+							<webapps>
+								<webapp>
+									<groupId>org.cloudfoundry.identity</groupId>
+									<artifactId>cloudfoundry-identity-api</artifactId>
+									<version>${project.version}</version>
+									<type>war</type>
+									<contextPath>api</contextPath>
+									<asWebapp>true</asWebapp>
+								</webapp>
+								<webapp>
+									<groupId>org.cloudfoundry.identity</groupId>
+									<artifactId>cloudfoundry-identity-app</artifactId>
+									<version>${project.version}</version>
+									<type>war</type>
+									<contextPath>app</contextPath>
+									<asWebapp>true</asWebapp>
+								</webapp>
+							</webapps>
+						</configuration>
+					</plugin>
+				</plugins>
 			</build>
 		</profile>
 		<profile>
@@ -104,28 +105,28 @@
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
 			</resource>
-            <resource>
-                <directory>../common/src/main/resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>log4j.properties</include>
-                </includes>
-            </resource>
+			<resource>
+				<directory>../common/src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>log4j.properties</include>
+				</includes>
+			</resource>
 		</resources>
-        <testResources>
-            <testResource>
-                <directory>../common/src/test/resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>log4j.properties</include>
-                </includes>
-            </testResource>
-            <testResource>
-                <directory>src/test/resources</directory>
-                <filtering>true</filtering>
-            </testResource>
-        </testResources>
-        <plugins>
+		<testResources>
+			<testResource>
+				<directory>../common/src/test/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>log4j.properties</include>
+				</includes>
+			</testResource>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+			</testResource>
+		</testResources>
+		<plugins>
 			<plugin>
 				<groupId>pl.project13.maven</groupId>
 				<artifactId>git-commit-id-plugin</artifactId>
@@ -142,7 +143,7 @@
 					<dateFormat>yyyy-MM-dd'T'HH:mm:ssZ</dateFormat>
 					<generateGitPropertiesFile>true</generateGitPropertiesFile>
 					<generateGitPropertiesFilename>src/main/resources/git.properties</generateGitPropertiesFilename>
-                    <dotGitDirectory>${dot.git.directory}</dotGitDirectory>
+					<dotGitDirectory>${dot.git.directory}</dotGitDirectory>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -165,7 +166,7 @@
 						</systemProperties>
 					</configuration>
 				</plugin>
-                <plugin>
+				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>2.11</version>
@@ -205,6 +206,14 @@
 							</configuration>
 						</execution>
 					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>2.3</version>
+					<configuration>
+						<failOnMissingWebXml>false</failOnMissingWebXml>
+					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -302,24 +311,24 @@
 			<artifactId>aspectjweaver</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		
-       <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-            <version>2.2.2</version>
-        </dependency>
 
 		<dependency>
-		    <groupId>org.apache.tomcat</groupId>
-		    <artifactId>tomcat-jdbc</artifactId>
-		    <version>7.0.32</version>
-		    <scope>runtime</scope>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-jdbc</artifactId>
+			<version>7.0.32</version>
+			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
@@ -382,11 +391,11 @@
 			<scope>test</scope>
 		</dependency>
 
-        <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <version>2.3.1</version>
-        </dependency>
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>2.3.1</version>
+		</dependency>
 
 		<dependency>
 			<groupId>postgresql</groupId>
@@ -400,14 +409,10 @@
 			<artifactId>mariadb-java-client</artifactId>
 			<version>1.1.3</version>
 		</dependency>
-        
-<!--        <dependency>
-        	<groupId>com.oracle</groupId>
-        	<artifactId>ojdbc6</artifactId>
-        	<version>11.2.0.3</version>
-        	<scope>runtime</scope>
-        </dependency>-->
-        
+
+		<!-- <dependency> <groupId>com.oracle</groupId> <artifactId>ojdbc6</artifactId> 
+			<version>11.2.0.3</version> <scope>runtime</scope> </dependency> -->
+
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
@@ -415,19 +420,19 @@
 			<scope>test</scope>
 		</dependency>
 
-        <dependency>
-            <groupId>com.jayway.jsonpath</groupId>
-            <artifactId>json-path</artifactId>
-            <version>0.9.1</version>
-            <scope>test</scope>
-        </dependency>
+		<dependency>
+			<groupId>com.jayway.jsonpath</groupId>
+			<artifactId>json-path</artifactId>
+			<version>0.9.1</version>
+			<scope>test</scope>
+		</dependency>
 
-        <dependency>
-            <groupId>com.jayway.jsonpath</groupId>
-            <artifactId>json-path-assert</artifactId>
-            <version>0.9.1</version>
-            <scope>test</scope>
-        </dependency>
+		<dependency>
+			<groupId>com.jayway.jsonpath</groupId>
+			<artifactId>json-path-assert</artifactId>
+			<version>0.9.1</version>
+			<scope>test</scope>
+		</dependency>
 
 	</dependencies>
 
