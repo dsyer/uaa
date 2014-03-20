@@ -31,13 +31,14 @@ import org.cloudfoundry.identity.uaa.user.JdbcUaaUserDatabase;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.event.ApplicationPreparedEvent;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.mock.web.MockFilterChain;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -152,8 +153,15 @@ public class BootstrapTests {
 	}
 
 	@Configuration
-	@ImportResource("classpath:/test/config/test-override.xml")
 	protected static class TestOverrideConfiguration {
+		
+		@Value("${logging.path}")
+		private String foo;
+
+		@Bean
+		public String foo() {
+			return foo;
+		}
 
 	}
 
