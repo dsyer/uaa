@@ -73,7 +73,7 @@ public class BootstrapTests {
 
     @Test
     public void testRootContextDefaults() throws Exception {
-        context = getServletContext("hsqldb", "file:./src/main/webapp/WEB-INF/spring-servlet.xml");
+        context = getServletContext("hsqldb", "classpath:/spring-servlet.xml");
         assertNotNull(context.getBean("userDatabase", JdbcUaaUserDatabase.class));
         FilterChainProxy filterChain = context.getBean(FilterChainProxy.class);
         MockHttpServletResponse response = new MockHttpServletResponse();
@@ -87,7 +87,7 @@ public class BootstrapTests {
     @Test
     public void testOverrideYmlConfigPath() throws Exception {
         System.setProperty("UAA_CONFIG_PATH", "./src/test/resources/test/config");
-        context = getServletContext("file:./src/main/webapp/WEB-INF/spring-servlet.xml",
+        context = getServletContext("classpath:/spring-servlet.xml",
                         "classpath:/test/config/test-override.xml");
         assertEquals("/tmp/uaa/logs", context.getBean("foo", String.class));
         assertEquals("[vmc, my, support]",
