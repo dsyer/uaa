@@ -37,42 +37,8 @@
 	<import resource="spring/openid-endpoints.xml" />
 	<import resource="spring/password-endpoints.xml" />
 
-	<bean id="messageSource"
-		class="org.springframework.context.support.ResourceBundleMessageSource">
-		<property name="basename" value="messages" />
-	</bean>
-
 	<authentication-manager id="emptyAuthenticationManager"
 		xmlns="http://www.springframework.org/schema/security" />
-
-	<bean id="authenticationDetailsSource"
-		class="org.cloudfoundry.identity.uaa.authentication.UaaAuthenticationDetailsSource" />
-
-	<bean id="basicAuthenticationEntryPoint"
-		class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
-		<property name="realmName" value="UAA/client" />
-		<property name="typeName" value="Basic" />
-	</bean>
-
-	<bean id="accessDecisionManager" class="org.springframework.security.access.vote.UnanimousBased">
-		<constructor-arg>
-			<list>
-				<bean class="org.springframework.security.oauth2.provider.vote.ScopeVoter">
-					<property name="scopePrefix" value="scope=" />
-				</bean>
-				<bean class="org.springframework.security.access.vote.RoleVoter" />
-				<bean class="org.springframework.security.access.vote.AuthenticatedVoter" />
-			</list>
-		</constructor-arg>
-	</bean>
-
-	<bean id="oauthAuthenticationEntryPoint"
-		class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
-		<property name="realmName" value="UAA/oauth" />
-	</bean>
-
-	<bean id="oauthAccessDeniedHandler"
-		class="org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler" />
 
 	<http name="uiSecurity" request-matcher-ref="uiRequestMatcher"
 		access-denied-page="/" authentication-manager-ref="authzAuthenticationMgr"
@@ -93,15 +59,6 @@
 		authentication-manager-ref="emptyAuthenticationManager">
 		<sec:intercept-url pattern="/**" access="denyAll" />
 	</sec:http>
-
-	<bean id="http403EntryPoint"
-		class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint" />
-
-	<bean id="logoutHandler"
-		class="org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler">
-		<property name="targetUrlParameter" value="redirect" />
-		<property name="defaultTargetUrl" value="/" />
-	</bean>
 
 	<bean id="uiRequestMatcher"
 		class="org.cloudfoundry.identity.uaa.security.web.DelegatingRequestMatcher">
@@ -126,16 +83,7 @@
 		</constructor-arg>
 	</bean>
 
-	<bean id="bcryptPasswordEncoder"
-		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
-
 	<oauth:web-expression-handler id="oauthWebExpressionHandler" />
-
-	<mvc:resources location="/" mapping="/**" />
-
-	<mvc:annotation-driven />
-
-	<mvc:default-servlet-handler />
 
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
@@ -156,11 +104,5 @@
 			</bean>
 		</property>
 	</bean>
-
-	<!--Basic application beans. -->
-	<bean id="loginInfoEndpoint"
-		class="org.cloudfoundry.identity.uaa.authentication.login.LoginInfoEndpoint" />
-
-	<bean id="healthzEndpoint" class="org.cloudfoundry.identity.uaa.web.HealthzEndpoint" />
 
 </beans>
