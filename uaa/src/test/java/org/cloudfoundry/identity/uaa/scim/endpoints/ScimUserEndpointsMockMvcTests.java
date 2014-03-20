@@ -21,32 +21,34 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.cloudfoundry.identity.uaa.config.YamlServletProfileInitializer;
 import org.cloudfoundry.identity.uaa.scim.ScimUser;
 import org.cloudfoundry.identity.uaa.scim.ScimUserProvisioning;
+import org.cloudfoundry.identity.uaa.server.GenericNonEmbeddedWebApplicationContext;
+import org.cloudfoundry.identity.uaa.server.UaaApplication;
 import org.cloudfoundry.identity.uaa.test.TestClient;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.annotation.AnnotatedBeanDefinitionReader;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.support.XmlWebApplicationContext;
 
 import com.googlecode.flyway.core.Flyway;
 
 public class ScimUserEndpointsMockMvcTests {
 
-    private XmlWebApplicationContext webApplicationContext;
+    private GenericNonEmbeddedWebApplicationContext webApplicationContext;
     private MockMvc mockMvc;
     private String scimToken;
 
     @Before
     public void setUp() throws Exception {
-        webApplicationContext = new XmlWebApplicationContext();
+        webApplicationContext = new GenericNonEmbeddedWebApplicationContext();
+        new AnnotatedBeanDefinitionReader(webApplicationContext).register(UaaApplication.class);
         webApplicationContext.setServletContext(new MockServletContext());
-        webApplicationContext.setConfigLocation("file:./src/main/webapp/WEB-INF/spring-servlet.xml");
         new YamlServletProfileInitializer().initialize(webApplicationContext);
         webApplicationContext.refresh();
         FilterChainProxy springSecurityFilterChain = webApplicationContext.getBean(FilterChainProxy.class);
