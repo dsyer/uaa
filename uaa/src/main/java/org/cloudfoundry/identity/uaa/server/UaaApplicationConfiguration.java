@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.cloudfoundry.identity.uaa.UaaConfiguration;
 import org.cloudfoundry.identity.uaa.UaaConfiguration.UaaConfigConstructor;
 import org.cloudfoundry.identity.uaa.authentication.UaaAuthenticationDetailsSource;
@@ -12,7 +14,9 @@ import org.cloudfoundry.identity.uaa.authentication.login.LoginInfoEndpoint;
 import org.cloudfoundry.identity.uaa.config.DataSourceConfiguration;
 import org.cloudfoundry.identity.uaa.config.YamlConfigurationValidator;
 import org.cloudfoundry.identity.uaa.security.web.SecurityFilterChainPostProcessor;
+import org.cloudfoundry.identity.uaa.web.ForwardAwareInternalResourceViewResolver;
 import org.cloudfoundry.identity.uaa.web.HealthzEndpoint;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration;
@@ -31,6 +35,9 @@ import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEn
 import org.springframework.security.oauth2.provider.vote.ScopeVoter;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
+import org.springframework.web.servlet.View;
+import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 
 @Configuration
@@ -38,6 +45,24 @@ import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuc
 @ImportResource("classpath:/spring-servlet.xml")
 @EnableAutoConfiguration(exclude=SecurityAutoConfiguration.class)
 public class UaaApplicationConfiguration {
+
+	@Value("${spring.view.prefix:/WEB-INF/jsp/}")
+	private String prefix = "";
+
+	@Value("${spring.view.suffix:}")
+	private String suffix = ".jsp";
+	
+	@Autowired
+	private ContentNegotiatingViewResolver contentNegotiatingViewResolver;
+	
+	@SuppressWarnings("deprecation")
+	@PostConstruct
+	public void init() {
+		// TODO: Upgrade to Jackson 2
+		org.springframework.web.servlet.view.json.MappingJacksonJsonView view = new org.springframework.web.servlet.view.json.MappingJacksonJsonView();
+		view.setExtractValueFromSingleKeyModel(true);
+		contentNegotiatingViewResolver.setDefaultViews(Arrays.<View>asList(view));
+	}
 
 	@Bean
 	protected YamlConfigurationValidator<UaaConfiguration> yamlConfigurationValidator(
@@ -111,6 +136,14 @@ public class UaaApplicationConfiguration {
 	@Bean
 	public BCryptPasswordEncoder bcryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+	
+	@Bean
+	public InternalResourceViewResolver defaultViewResolver() {
+		ForwardAwareInternalResourceViewResolver resolver = new ForwardAwareInternalResourceViewResolver();
+		resolver.setPrefix(this.prefix);
+		resolver.setSuffix(this.suffix);
+		return resolver;
 	}
 	
 	@Bean

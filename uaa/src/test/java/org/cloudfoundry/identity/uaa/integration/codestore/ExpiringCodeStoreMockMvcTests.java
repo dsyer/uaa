@@ -23,8 +23,8 @@ import java.sql.Timestamp;
 
 import org.cloudfoundry.identity.uaa.codestore.ExpiringCode;
 import org.cloudfoundry.identity.uaa.config.YamlServletProfileInitializer;
-import org.cloudfoundry.identity.uaa.server.GenericNonEmbeddedWebApplicationContext;
 import org.cloudfoundry.identity.uaa.server.UaaApplicationConfiguration;
+import org.cloudfoundry.identity.uaa.test.GenericNonEmbeddedWebApplicationContext;
 import org.cloudfoundry.identity.uaa.test.TestClient;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.AfterClass;

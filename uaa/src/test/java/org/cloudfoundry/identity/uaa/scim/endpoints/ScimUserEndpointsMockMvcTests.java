@@ -21,8 +21,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import org.cloudfoundry.identity.uaa.config.YamlServletProfileInitializer;
 import org.cloudfoundry.identity.uaa.scim.ScimUser;
 import org.cloudfoundry.identity.uaa.scim.ScimUserProvisioning;
-import org.cloudfoundry.identity.uaa.server.GenericNonEmbeddedWebApplicationContext;
 import org.cloudfoundry.identity.uaa.server.UaaApplicationConfiguration;
+import org.cloudfoundry.identity.uaa.test.GenericNonEmbeddedWebApplicationContext;
 import org.cloudfoundry.identity.uaa.test.TestClient;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.After;

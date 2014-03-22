@@ -1,4 +1,4 @@
-package org.cloudfoundry.identity.uaa.server;
+package org.cloudfoundry.identity.uaa.test;
 
 import javax.servlet.ServletConfig;
 

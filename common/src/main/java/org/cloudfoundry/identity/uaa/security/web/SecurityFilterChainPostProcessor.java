@@ -61,6 +61,8 @@ import org.springframework.util.Assert;
  * @author Luke Taylor
  */
 @ManagedResource
+// TODO: turn this into a security configurer for @Configuration usage (or
+// just use standard Spring Security features).
 public class SecurityFilterChainPostProcessor implements BeanPostProcessor {
     private final Log logger = LogFactory.getLog(getClass());
     private boolean requireHttps = false;
